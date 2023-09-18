@@ -14,6 +14,8 @@ const FigureImg = styled.figure`
   position: relative;
   width: 100%;
   height: 300px;
+  opacity: 0;
+  transition: all 1s linear;
 
   img {
     width: 100%;
@@ -30,13 +32,14 @@ const FigureImg = styled.figure`
 const MainContent = styled.section<Partial<Styled>>`
   ${Flex}
   position: absolute;
-  top: 250px;
+  top: 120vh;
   width: 100%;
   padding: 30px;
   padding-bottom: 80px;
   min-height: calc(100% - 250px);
   background-color:white;
   border-radius:  20px 20px 0 0;
+  transition: all 0.7s linear;
 `
 
 const CustomH1 = styled.h1`

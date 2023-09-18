@@ -34,5 +34,7 @@ const Layout = styled.div`
   margin: 0 auto;
   max-width: 700px;
   overflow: auto;
-  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  @media (min-width: 400px) {
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px; 
+  }
 `
