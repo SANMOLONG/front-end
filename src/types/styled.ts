@@ -1,5 +1,9 @@
 export interface Styled {
   $state: boolean;
+	$fSize: number;
+	$type:string;
+	$color:string;
+	$length:number;
 
 	// Felx-Grid
 	$gap: number;

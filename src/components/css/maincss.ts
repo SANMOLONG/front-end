@@ -42,9 +42,9 @@ const MainContent = styled.section<Partial<Styled>>`
   transition: all 0.7s linear;
 `
 
-const CustomH1 = styled.h1`
+const CustomH1 = styled.h1<Partial<Styled>>`
   font-family: 'HakgyoansimGaeulsopungB';
-  font-size: 4rem;
+  font-size: ${({$fSize}) => $fSize ? `${$fSize}rem` : "4rem"};
 `
 
 const CustomH2 = styled.h2`
@@ -104,6 +104,7 @@ const NavBottom = styled.div<Partial<Styled>>`
   width: 100%;
   height: 70px;
   background-color: #fff;
+  border-top: 1px solid #FF9859;
 `
 
 const NavIcon = styled.div<Partial<Styled>>`
