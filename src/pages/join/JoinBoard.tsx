@@ -1,9 +1,10 @@
 import { FC } from "react";
 import styled from "styled-components";
 import writebutton from "../../asset/join/write.svg";
-import { JoinBoardDrop } from "./JoinBoardDrop";
+
 import { Footer } from "../../components";
 import { useNavigate } from "react-router-dom";
+import { JoinBoardDrop } from "./JoinBoardDrop";
 
 export const JoinBoard: FC = () => {
 	const navigate = useNavigate();

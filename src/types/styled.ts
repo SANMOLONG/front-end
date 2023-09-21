@@ -4,6 +4,8 @@ export interface Styled {
 	$type:string;
 	$color:string;
 	$length:number;
+	$bColor:string;
+	$grade:number;
 
 	// Felx-Grid
 	$gap: number;
