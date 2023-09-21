@@ -5,7 +5,7 @@ import { useChatting } from '../hooks/useChatting';
 
 
 export const Chatting: FC = () => {
-  const {mount, mountSelect, chat, chattingAreaRef, chatMsg, sendChat, setChat, urgentChat,onNavigete, onMountSelect, onRoomChange} = useChatting()
+  const {mount, mountSelect, chat, chattingAreaRef, chatMsg, sendChat, setChat, urgentChat,onNavigate, onMountSelect, onRoomChange} = useChatting()
 
   return (
     <SC.PagesLayout>
@@ -17,7 +17,7 @@ export const Chatting: FC = () => {
         <SC.FlexBox $fd='column' $ai='start' $gap={10} style={{ padding: "10px 30px" }}>
           <SC.FlexBox $gap={10} $jc='start' style={{ position: "relative" }}>
             <SC.SelectBtn onClick={onMountSelect} $type="gradientOrange" children={`${mount[0]} ▼`} />
-            <SC.SelectBtn onClick={onNavigete("/home")} children="뒤로가기" />
+            <SC.SelectBtn onClick={onNavigate("/home")} children="뒤로가기" />
             {mountSelect && (
               <SC.MountSelectLayout onMouseLeave={onMountSelect} children={
                 [["설악산", 1], ["오대산", 2], ["치악산", 3], ["태백산", 4]].map(list => (
