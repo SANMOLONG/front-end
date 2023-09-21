@@ -63,7 +63,7 @@ export const Home: FC = () => {
   }
 
   const {isLoading, isError, data} = useGetHomedateQuery({})
-  const {isLoading:courseLoading, isError:couseError, data:courseDate} = useGetHomeCourseDateQuery({})
+  const {isLoading:courseLoading, isError:couseError, data:courseDate} = useGetHomeCourseDateQuery({mount:mount[0]})
   console.log("query", courseDate)
 
 
@@ -228,9 +228,6 @@ export const Home: FC = () => {
             ))}
         </Slider>
         </SliderLayout2>
-
-
-
         <SC.FlexBox $jc='space-between' style={{ padding: "0 30px" }}>
         <SettingsBTN onClick={onNavigate(`${mount[1]}`)}>실시간채팅</SettingsBTN>
           <SettingsBTN onClick={onNavigate('/joinboard')}>함께하기</SettingsBTN>
