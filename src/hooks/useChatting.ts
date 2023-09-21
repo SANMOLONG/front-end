@@ -47,6 +47,7 @@ export const useChatting = ():any => {
           // 01 소켓연결부
           clientRef.current = new Client({
             brokerURL: `ws://ec2-13-125-219-90.ap-northeast-2.compute.amazonaws.com/ws-stomp`,
+        
             reconnectDelay: 5000,
             heartbeatIncoming: 4000,
             heartbeatOutgoing: 4000,
