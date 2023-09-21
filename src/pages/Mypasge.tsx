@@ -2,7 +2,7 @@ import { FC } from 'react'
 import { CustomH1, CustomH2, Flex, FlexBox, FooterNav, PagesLayout } from '../components'
 import styled from 'styled-components'
 import { Styled } from '../types/styled'
-import { GridBox, MountaiMedal, Point, WaringLayout, WeatherMountContent, WeatherMountTiitle } from './Home'
+import { GridBox, MountaiMedal, WeatherMountContent, WeatherMountTiitle } from './Home'
 import { chiak, odae, seorak, taebaek } from '../asset'
 import { switchMoney } from '../asset/homeicon'
 
@@ -55,8 +55,8 @@ export const Mypasge: FC = () => {
 
         <FlexBox $fd='column' $ai='start' $gap={10} style={{ width: "100%" }}>
           <MypageTitle children="나의 플로깅 포인트 " />
-          <MypagePoint style={{padding:"0 40px"}}>
-            <div style={{fontSize:"3rem", width:"100%", fontWeight:"800"}}>500g</div>
+          <MypagePoint style={{ padding: "0 40px" }}>
+            <div style={{ fontSize: "3rem", width: "100%", fontWeight: "800" }}>500g</div>
             <FlexBox $fd='column' $gap={5} style={{ width: "80px" }}>
               <img src={switchMoney} alt='switchMoney' />
               <WeatherMountContent children="환전하기" />
