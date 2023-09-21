@@ -1,38 +1,38 @@
-import { FC, useEffect, useRef, useState } from 'react'
-import * as SC from '../components'
-import { chiak, homeSvg, odae, seorak, taebaek, togeterSvg, userSvg } from '../asset'
-import { useRoute } from '../hooks'
+import { FC, useEffect, useRef, useState } from "react";
+import * as SC from "../components";
+import { chiak, homeSvg, odae, seorak, taebaek, togeterSvg, userSvg } from "../asset";
+import { useRoute } from "../hooks";
 
 export const Main: FC = () => {
-  const bottomRef = useRef(null)
-  const topImgRef = useRef<HTMLDivElement | null>(null)
-  const mainContentRef = useRef<HTMLDivElement | null>(null)
-  const [lastIntro, setLastIntro] = useState(true)
-  const {onNavigete} = useRoute()
+	const bottomRef = useRef(null);
+	const topImgRef = useRef<HTMLDivElement | null>(null);
+	const mainContentRef = useRef<HTMLDivElement | null>(null);
+	const [lastIntro, setLastIntro] = useState(true);
+	const { onNavigate } = useRoute();
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          console.log("화면에 등장")
-          setLastIntro(false)
-        } else {
-          setLastIntro(true)
-        }
-      },
-      { threshold: 0.2 }
-    )
-    bottomRef.current && observer.observe(bottomRef.current)
+	useEffect(() => {
+		const observer = new IntersectionObserver(
+			([entry]) => {
+				if (entry.isIntersecting) {
+					console.log("화면에 등장");
+					setLastIntro(false);
+				} else {
+					setLastIntro(true);
+				}
+			},
+			{ threshold: 0.2 }
+		);
+		bottomRef.current && observer.observe(bottomRef.current);
 
-    if(mainContentRef.current) {
-      mainContentRef.current.style.top = "250px"
-      setTimeout(() => {
-        if(topImgRef.current) topImgRef.current.style.opacity = "1"
-      }, 500)
-    }
-  }, [])
+		if (mainContentRef.current) {
+			mainContentRef.current.style.top = "250px";
+			setTimeout(() => {
+				if (topImgRef.current) topImgRef.current.style.opacity = "1";
+			}, 500);
+		}
+	}, []);
 
-  return (
+return (
     <SC.PagesLayout>
       <SC.FigureImg ref={topImgRef} children={<img src={require("../asset/seorak.jpeg")} alt='MainImg' />} />
       <SC.MainContent ref={mainContentRef} $fd='column' $ai='start' $jc='start' $gap={30}>

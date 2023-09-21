@@ -37,7 +37,7 @@ export const JoinDetail = () => {
 					수정처럼 맑은 계곡과 기이한 암석이 어우러져 우리나라 최고의 단풍을 즐길 수 있는 대표 코스
 				</div>
 			</CourseInfo>
-			<div style={{ height: "150px", overflowY: "scroll" }}>
+			<div style={{ height: "150px", overflowY: "scroll", borderRadius: "10px" }}>
 				<Content>
 					{`슝~갓다 슝~갔다 픡 꼬꾸라지면 you die
 
