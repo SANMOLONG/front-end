@@ -23,6 +23,8 @@ function App() {
       <Route path='/home' element={<Pages.Home />}/>
       <Route path='/home/:id' element={<Pages.Chatting />}/>
       <Route path='/mypage' element={<Pages.Mypasge />}/>
+      <Route path='/joinboard' element={<Pages.JoinBoard />} />
+			<Route path='/joinwrite' element={<Pages.JoinWrite />} />
     </Routes>
     </Layout>
     )
@@ -38,3 +40,4 @@ const Layout = styled.div`
     box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px; 
   }
 `
+
