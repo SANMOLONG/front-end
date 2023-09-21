@@ -1,18 +1,18 @@
 import { FC, useEffect, useRef, useState } from 'react'
-// import { useRoute } from '../hooks'
 import * as SC from '../components'
-import { chiak, homeSvg, odae, seorak, taebaek, togeterSvg, userSvg } from '../asset'
+import { chiak, odae, seorak, taebaek } from '../asset'
 import styled, { css } from 'styled-components'
 import Slider from 'react-slick'
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css"
 import { Styled } from '../types/styled'
 import * as AS from '../asset/homeicon'
+import { useRoute } from '../hooks'
 
 
 
 export const Home: FC = () => {
-  // const {onNavigete} = useRoute()
+  const {onNavigete} = useRoute()
   const [mount, setMount] = useState<any>(["설악산", 1])
   const onChangeMount = (targer: any) => () => {
     setMount(targer)
@@ -36,8 +36,7 @@ export const Home: FC = () => {
     slidesToShow: 1,
     swipeToSlide: true,
     focusOnSelect: true,
-    autoplay: true,
-    autoplaySpeed: 5000,
+    autoplay: false,
     infinite: true,
     dots: false,
     arrows: false,
@@ -52,7 +51,7 @@ export const Home: FC = () => {
   }, [])
 
   return (
-    <SC.PagesLayout $bColor="#FFECDB">
+    <SC.PagesLayout $bColor="#FFECDB" style={{}}>
       <SliderLayout>
         <Slider {...settings}>
 
@@ -270,57 +269,65 @@ export const Home: FC = () => {
         <Slider {...settings2}>
             <SliderCourse>
               <SliderCircle />
+              <SliderCircleText $fd='column' $gap={5}>
+                <SliderCircleMount $fSize={2}>용대폭포코스(1)</SliderCircleMount>
+                <SliderCircleMount $fSize={1.5}>{`난이도 : 쉬움`}</SliderCircleMount>
+              </SliderCircleText>
             </SliderCourse>
+
+            <SliderCourse>
+              <SliderCircle />
+              <SliderCircleText $fd='column' $gap={5}>
+                <SliderCircleMount $fSize={2}>용대폭포코스(2)</SliderCircleMount>
+                <SliderCircleMount $fSize={1.5}>{`난이도 : 쉬움`}</SliderCircleMount>
+              </SliderCircleText>
+            </SliderCourse>
+
         </Slider>
         </SliderLayout2>
 
 
 
         <SC.FlexBox $jc='space-between' style={{ padding: "0 30px" }}>
-        <SettingsBTN >실시간채팅</SettingsBTN>
-          <SettingsBTN >함께하기</SettingsBTN>
+        <SettingsBTN onClick={onNavigete("1")}>실시간채팅</SettingsBTN>
+          <SettingsBTN onClick={onNavigete('/joinboard')}>함께하기</SettingsBTN>
         </SC.FlexBox>
       </MountCourse>
-      <div style={{ position: "fixed", bottom: 0, maxWidth: "700px", width: "100%" }}>
-        <SC.NavBottom $jc='space-around'>
-          {[homeSvg, togeterSvg, userSvg].map(list =>
-            <SC.NavIcon key={list} children={<img src={list} alt='NavbottomImg' />} />)}
-        </SC.NavBottom>
-      </div>
+      <SC.FooterNav />
     </SC.PagesLayout>
   )
 }
 
 
-const SliderLayout = styled.div`
+export const SliderLayout = styled.div`
   width: 100%;
   height: 240px;
   background-color: #FF9D5D;
   border-radius: 0 0 20px 20px;
 `
 
-const SliderLayout2 = styled.div`
+export const SliderLayout2 = styled.div`
   width: 90%;
-  height: 150px;
+  height: 250px;
 `
 
-const SliderInner = styled.div`
+export const SliderInner = styled.div`
   width: 390px;
   height: 200px;
 `
 
-const MountainWeather = styled.div<Partial<Styled>>`
+export const MountainWeather = styled.div<Partial<Styled>>`
   ${SC.Flex}
   width: 20%;
   height: 200px;
 `
 
-const WeatherMountTiitle = styled.h2`
+export const WeatherMountTiitle = styled.h2`
   font-weight: 800;
   font-size: 1.5rem;
 `
 
-const WeatherMountState = styled.h3<Partial<Styled>>`
+export const WeatherMountState = styled.h3<Partial<Styled>>`
   ${SC.Flex}
   color: ${({ $state }) => $state ? "#65938F" : "#FF625D"};
   font-size: 1.25rem;
@@ -328,18 +335,18 @@ const WeatherMountState = styled.h3<Partial<Styled>>`
   padding: 4px 10px;
   border-radius: 20px;
 `
-const WeatherMountContent = styled.h3<Partial<Styled>>`
+export const WeatherMountContent = styled.h3<Partial<Styled>>`
   font-size: 1rem;
 `
 
-const WaringLayout = styled.div<Partial<Styled>>`
+export const WaringLayout = styled.div<Partial<Styled>>`
   ${SC.Flex}
   width: 100%;
   height: 140px;
   border-radius: 20px;
   background-color: #fff;
 `
-const WaringGrade = styled(WeatherMountContent) <Partial<Styled>>`
+export const WaringGrade = styled(WeatherMountContent) <Partial<Styled>>`
   ${({ $grade }) => $grade === 1
     ? css`
       color: #004FAE;
@@ -354,7 +361,7 @@ const WaringGrade = styled(WeatherMountContent) <Partial<Styled>>`
           `};
 `
 
-const GridBox = styled.div<Partial<Styled>>`
+export const GridBox = styled.div<Partial<Styled>>`
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   column-gap: 10px;
@@ -362,29 +369,29 @@ const GridBox = styled.div<Partial<Styled>>`
   width: 100%;
 `
 
-const ForbiddenContent = styled.h3`
+export const ForbiddenContent = styled.h3`
   font-size: 0.8rem;
 `
 
-const MountaiMedal = styled.img<Partial<Styled>>`
+export const MountaiMedal = styled.img<Partial<Styled>>`
   opacity: ${({ $state }) => $state ? "1" : "0.3"};
   border: 2px solid #fff;
   border-radius: 50%;
 `
 
-const Point = styled.div`
+export const Point = styled.div`
 width: 100%;
   font-size: 4.5rem;
   font-weight: 800;
 `
 
 
-const MountCourse = styled.article<Partial<Styled>>`
+export const MountCourse = styled.article<Partial<Styled>>`
 ${SC.Flex}
 padding: 30px 0;
 `
 
-const SlelectMount = styled.div<Partial<Styled>>`
+export const SlelectMount = styled.div<Partial<Styled>>`
 ${SC.Flex}
 width: 100px;
 height: 35px;
@@ -398,7 +405,7 @@ background: linear-gradient(89deg, #FDCB82 2.48%, #FF9859 81.7%);
 `}
 `
 
-const SettingsBTN = styled.div<Partial<Styled>>`
+export const SettingsBTN = styled.div<Partial<Styled>>`
   ${SC.Flex}
   ${SC.cursor}
   width: 150px;
@@ -409,17 +416,29 @@ const SettingsBTN = styled.div<Partial<Styled>>`
   background: linear-gradient(89deg, #FDCB82 2.48%, #FF9859 81.7%);
 `
 
-const SliderCourse = styled.div`
+export const SliderCourse = styled.div`
+  position: relative;
   max-width: 100%;
-  height: 150px;
-  background-color: red;
+  height: 250px;
 `
 
-const SliderCircle = styled.div`
+export const SliderCircle = styled.div`
   margin: 0 auto;
-  width: 150px;
-  height: 150px;
+  width: 250px;
+  height: 250px;
   border-radius: 50%;
   background-color: yellow;
+`
 
+export const SliderCircleText = styled.div<Partial<Styled>>`
+  ${SC.Flex}
+  position: absolute;
+  top: 60%;
+  left: 50%;
+  transform: translateX(-50%);
+`
+
+export const SliderCircleMount = styled.h1<Partial<Styled>>`
+  font-size: ${({$fSize}) => `${$fSize}rem`};
+  font-family: 'HakgyoansimGaeulsopungB';
 `

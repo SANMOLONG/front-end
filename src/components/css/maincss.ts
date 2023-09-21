@@ -67,12 +67,12 @@ background: linear-gradient(104.73deg, #FDCB82 54.49%, #FF9859 80.95%);
 
 const MainIntrodution = styled.article`
   font-family: "Pretendard";
-  font-size: 1.25rem;
+  font-size: 1.5rem;
   text-align: justify;
 	white-space: pre-line;
   span {
     font-family: 'HakgyoansimGaeulsopungB';
-    font-size: 2rem;
+    font-size: 2.5rem;
   }
 `
 
@@ -110,6 +110,7 @@ const NavBottom = styled.div<Partial<Styled>>`
 
 const NavIcon = styled.div<Partial<Styled>>`
   ${Flex}
+  ${cursor}
   width: 70px;
   height: 70px;
 `
