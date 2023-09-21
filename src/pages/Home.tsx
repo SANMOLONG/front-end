@@ -7,7 +7,8 @@ import Slider from 'react-slick'
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css"
 import { Styled } from '../types/styled'
-import * as AS from '../asset/home'
+import * as AS from '../asset/homeicon'
+
 
 
 export const Home: FC = () => {
@@ -43,7 +44,7 @@ export const Home: FC = () => {
   }
 
   const svgPath = (number: number | undefined) => {
-    return number && (new Image().src = require(`../asset/home/walking${number}.svg`));
+    return number && (new Image().src = require(`../asset/homeicon/walking${number}.svg`));
   }
 
   useEffect(() => {
