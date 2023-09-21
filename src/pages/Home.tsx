@@ -8,6 +8,7 @@ import "slick-carousel/slick/slick-theme.css"
 import { Styled } from '../types/styled'
 import * as AS from '../asset/homeicon'
 import { useRoute } from '../hooks'
+import { useGetHomeCourseDateQuery, useGetHomedateQuery } from '../redux/api/RTKquery'
 
 
 
@@ -17,8 +18,6 @@ export const Home: FC = () => {
   const onChangeMount = (targer: any) => () => {
     setMount(targer)
   }
-
-
   const mountCourseRef = useRef<HTMLDivElement | null>(null)
 
   const settings = {
@@ -28,7 +27,7 @@ export const Home: FC = () => {
     autoplay: true,
     autoplaySpeed: 3000,
     infinite: true,
-    dots: true,
+    dots: false,
     arrows: false,
   }
 
@@ -43,14 +42,38 @@ export const Home: FC = () => {
   }
 
   const svgPath = (number: number | undefined) => {
-    return number && (new Image().src = require(`../asset/homeicon/walking${number}.svg`));
+    let present = number && Math.ceil(number/10)
+    return number && (new Image().src = require(`../asset/homeicon/walking${present+"0"}.svg`));
   }
+
+  const riskMsg = (number: number | undefined) => {
+    let present = number && Math.ceil(number/10)
+    if(present && 0<=present && present<=4) return "낮음"
+    else if(present && present<=6) return "다소낮음"
+    else if(present && present<=8) return "주의"
+    else return "경보"
+  }
+
+  const onforecast = (forecast:any) => {
+    // 1(맑음), 2(비), 3(구름), 4(흐림)
+    if(forecast === 1) return AS.sunny
+    else if(forecast === 2) return AS.rainny
+    else if(forecast === 3) return AS.cloud
+    else return AS.gloomy
+  }
+
+  const {isLoading, isError, data} = useGetHomedateQuery({})
+  const {isLoading:courseLoading, isError:couseError, data:courseDate} = useGetHomeCourseDateQuery({})
+  console.log("query", courseDate)
+
 
   useEffect(() => {
     mountCourseRef.current && (mountCourseRef.current.style.height = `${window.innerHeight - 310}px`)
   }, [])
-
-  return (
+  if(isLoading || isError || courseLoading || couseError) return <div>로딩 중...</div>
+  else {
+    const {badges, fires, plogging, weathers} = data;
+    return (
     <SC.PagesLayout $bColor="#FFECDB" style={{}}>
       <SliderLayout>
         <Slider {...settings}>
@@ -58,45 +81,17 @@ export const Home: FC = () => {
           {/* 슬라이더 첫번째 아이템 */}
           <SliderInner>
             <SC.FlexBox $gap={10}>
-              <MountainWeather $fd='column' $gap={5}>
-                <img src={AS.sunny} alt='weather' />
-                <WeatherMountTiitle children="설악산" />
-                <WeatherMountState $state={true} children="입산가능" />
+              {weathers.map(({mount, hiking, sunrise,sunset, forecast}:any) => (
+                <MountainWeather key={mount} $fd='column' $gap={5}>
+                <img src={onforecast(forecast)} alt='weather' />
+                <WeatherMountTiitle children={mount} />
+                <WeatherMountState $state={hiking} children={hiking ? "입산가능" : "입산불가"} />
                 <SC.FlexBox $fd='column'>
-                  <WeatherMountContent children="일출 07:00" />
-                  <WeatherMountContent children="일몰 18:36" />
+                  <WeatherMountContent children={`일출 ${sunrise}`} />
+                  <WeatherMountContent children={`일물 ${sunset}`} />
                 </SC.FlexBox>
               </MountainWeather>
-
-              <MountainWeather $fd='column' $gap={5}>
-                <img src={AS.gloomy} alt='weather' />
-                <WeatherMountTiitle children="오대산" />
-                <WeatherMountState $state={true} children="입산가능" />
-                <SC.FlexBox $fd='column'>
-                  <WeatherMountContent children="일출 07:00" />
-                  <WeatherMountContent children="일몰 18:36" />
-                </SC.FlexBox>
-              </MountainWeather>
-
-              <MountainWeather $fd='column' $gap={5}>
-                <img src={AS.cloud} alt='weather' />
-                <WeatherMountTiitle children="치악산" />
-                <WeatherMountState $state={true} children="입산가능" />
-                <SC.FlexBox $fd='column'>
-                  <WeatherMountContent children="일출 07:00" />
-                  <WeatherMountContent children="일몰 18:36" />
-                </SC.FlexBox>
-              </MountainWeather>
-
-              <MountainWeather $fd='column' $gap={5}>
-                <img src={AS.rainny} alt='weather' />
-                <WeatherMountTiitle children="태백산" />
-                <WeatherMountState $state={false} children="입산불가" />
-                <SC.FlexBox $fd='column'>
-                  <WeatherMountContent children="일출 07:00" />
-                  <WeatherMountContent children="일몰 18:36" />
-                </SC.FlexBox>
-              </MountainWeather>
+              ))}
             </SC.FlexBox>
           </SliderInner>
 
@@ -105,41 +100,17 @@ export const Home: FC = () => {
             <SC.FlexBox $fd='column' $gap={10} style={{ padding: "20px 30px" }}>
               <SC.CustomH1 $fSize={2} children="금일 산불경보 현황" style={{ width: "100%", color: "#fff" }} />
               <WaringLayout $gap={5}>
-                <MountainWeather $fd='column' $gap={5}>
-                  <img src={svgPath(10)} alt='weather' />
-                  <WeatherMountTiitle children="설악산" />
-                  <SC.FlexBox $fd='column'>
-                    <WaringGrade $grade={1}>낮음</WaringGrade>
-                    <div style={{ fontWeight: "700" }}>10%</div>
-                  </SC.FlexBox>
-                </MountainWeather>
 
-                <MountainWeather $fd='column' $gap={5}>
-                  <img src={svgPath(40)} alt='weather' />
-                  <WeatherMountTiitle children="오대산" />
+                {fires.map((list:any) => (
+                  <MountainWeather key={list.mount} $fd='column' $gap={5}>
+                  <img src={svgPath(list.risk)} alt='weather' />
+                  <WeatherMountTiitle children={list.mount} />
                   <SC.FlexBox $fd='column'>
-                    <WaringGrade $grade={2}>다소낮음</WaringGrade>
-                    <div style={{ fontWeight: "700" }}>40%</div>
+                    <WaringGrade $grade={1}>{riskMsg(list.risk)}</WaringGrade>
+                    <div style={{ fontWeight: "700" }}>{list.risk}%</div>
                   </SC.FlexBox>
                 </MountainWeather>
-
-                <MountainWeather $fd='column' $gap={5}>
-                  <img src={svgPath(70)} alt='weather' />
-                  <WeatherMountTiitle children="치악산" />
-                  <SC.FlexBox $fd='column'>
-                    <WaringGrade $grade={2}>높음</WaringGrade>
-                    <div style={{ fontWeight: "700" }}>70%</div>
-                  </SC.FlexBox>
-                </MountainWeather>
-
-                <MountainWeather $fd='column' $gap={5}>
-                  <img src={svgPath(100)} alt='weather' />
-                  <WeatherMountTiitle children="태백산" />
-                  <SC.FlexBox $fd='column'>
-                    <WaringGrade $grade={4}>경보</WaringGrade>
-                    <div style={{ fontWeight: "700" }}>100%</div>
-                  </SC.FlexBox>
-                </MountainWeather>
+                ))}
               </WaringLayout>
             </SC.FlexBox>
           </SliderInner>
@@ -201,40 +172,16 @@ export const Home: FC = () => {
             <SC.FlexBox $fd='column' $gap={10} style={{ padding: "20px 30px" }}>
               <SC.CustomH1 $fSize={2} children="나의 뱃지 리스트" style={{ width: "100%", color: "#fff" }} />
               <GridBox style={{ alignItems: "start" }}>
-
-                <SC.FlexBox $fd='column' $gap={5}>
+              {badges.map(({mount,count,lastDate}:any) => (
+                  <SC.FlexBox key={mount} $fd='column' $gap={5}>
                   <div style={{ position: "relative" }}>
-                    <MountaiMedal src={seorak} $state={true} alt='seorak' />
-                    <div style={{ position: "absolute", right: "0", bottom: "0", fontWeight: "800" }}>x20</div>
+                    <MountaiMedal src={seorak} $state={!!count} alt='seorak' />
+                    {!!count && <div style={{ position: "absolute", right: "0", bottom: "0", fontWeight: "800" }}>x{count}</div>}
                   </div>
-                  <WeatherMountTiitle children="설악산" />
-                  <WeatherMountContent children="023-02-03" />
+                  <WeatherMountTiitle children={mount} />
+                  <WeatherMountContent children={lastDate} />
                 </SC.FlexBox>
-
-                <SC.FlexBox $fd='column' $gap={5}>
-                  <div style={{ position: "relative" }}>
-                    <MountaiMedal src={odae} $state={true} alt='odae' />
-                    <div style={{ position: "absolute", right: "0", bottom: "0", fontWeight: "800" }}>x20</div>
-                  </div>
-                  <WeatherMountTiitle children="오대산" />
-                  <WeatherMountContent children="2023-02-03" />
-                </SC.FlexBox>
-
-                <SC.FlexBox $fd='column' $gap={5}>
-                  <div style={{ position: "relative" }}>
-                    <MountaiMedal src={chiak} $state={false} alt='chiak' />
-                  </div>
-                  <WeatherMountTiitle children="치악산" />
-                  <WeatherMountContent $state={false} children="" />
-                </SC.FlexBox>
-
-                <SC.FlexBox $fd='column' $gap={5}>
-                  <div style={{ position: "relative" }}>
-                    <MountaiMedal src={taebaek} $state={false} alt='taebaek' />
-                  </div>
-                  <WeatherMountTiitle children="태백산" />
-                  <WeatherMountContent children="" />
-                </SC.FlexBox>
+                ))}
               </GridBox>
             </SC.FlexBox>
           </SliderInner>
@@ -244,7 +191,7 @@ export const Home: FC = () => {
             <SC.FlexBox $fd='column' $gap={10} style={{ padding: "20px 30px" }}>
               <SC.CustomH1 $fSize={2} children="나의 플로깅 포인트" style={{ width: "100%", color: "#fff" }} />
               <WaringLayout $gap={5} style={{ padding: "0 50px" }}>
-                <Point>500g</Point>
+                <Point>{plogging}</Point>
                 <SC.FlexBox $fd='column' $gap={5} style={{ width: "80px" }}>
                   <img src={AS.switchMoney} alt='switchMoney' />
                   <WeatherMountContent children="환전하기" />
@@ -267,35 +214,32 @@ export const Home: FC = () => {
         
         <SliderLayout2>
         <Slider {...settings2}>
-            <SliderCourse>
-              <SliderCircle />
-              <SliderCircleText $fd='column' $gap={5}>
-                <SliderCircleMount $fSize={2}>용대폭포코스(1)</SliderCircleMount>
-                <SliderCircleMount $fSize={1.5}>{`난이도 : 쉬움`}</SliderCircleMount>
-              </SliderCircleText>
-            </SliderCourse>
-
-            <SliderCourse>
-              <SliderCircle />
-              <SliderCircleText $fd='column' $gap={5}>
-                <SliderCircleMount $fSize={2}>용대폭포코스(2)</SliderCircleMount>
-                <SliderCircleMount $fSize={1.5}>{`난이도 : 쉬움`}</SliderCircleMount>
-              </SliderCircleText>
-            </SliderCourse>
-
+            {courseDate.map(({courseNM, level, coursePic}:any) => (
+                <SliderCourse key={courseNM}> 
+                <SliderCircle>
+                <img src={coursePic} alt='coursePic'/>
+                </SliderCircle>
+                
+                <SliderCircleText $fd='column' $gap={5}>
+                  <SliderCircleMount $fSize={2}>{courseNM}</SliderCircleMount>
+                  <SliderCircleMount $fSize={1.5}>{`난이도 : ${level}`}</SliderCircleMount>
+                </SliderCircleText>
+              </SliderCourse>
+            ))}
         </Slider>
         </SliderLayout2>
 
 
 
         <SC.FlexBox $jc='space-between' style={{ padding: "0 30px" }}>
-        <SettingsBTN onClick={onNavigate("1")}>실시간채팅</SettingsBTN>
+        <SettingsBTN onClick={onNavigate(`${mount[1]}`)}>실시간채팅</SettingsBTN>
           <SettingsBTN onClick={onNavigate('/joinboard')}>함께하기</SettingsBTN>
         </SC.FlexBox>
       </MountCourse>
       <SC.FooterNav />
     </SC.PagesLayout>
   )
+  }
 }
 
 
@@ -423,11 +367,24 @@ export const SliderCourse = styled.div`
 `
 
 export const SliderCircle = styled.div`
+  position: relative;
   margin: 0 auto;
   width: 250px;
   height: 250px;
   border-radius: 50%;
   background-color: yellow;
+  overflow: hidden;
+
+  img {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
 `
 
 export const SliderCircleText = styled.div<Partial<Styled>>`
@@ -441,4 +398,5 @@ export const SliderCircleText = styled.div<Partial<Styled>>`
 export const SliderCircleMount = styled.h1<Partial<Styled>>`
   font-size: ${({$fSize}) => `${$fSize}rem`};
   font-family: 'HakgyoansimGaeulsopungB';
+  color:#fff;
 `
