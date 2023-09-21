@@ -19,6 +19,7 @@ const axiosBaseQuery =
 		try {
 			switch (types) {
 				default:
+					console.log(data)
 					const res = await instance({ url, method, data });
 					return { data: res.data };
 			}
@@ -50,9 +51,10 @@ export const rtkQuery = createApi({
 				providesTags: ["HOMEDATA"],
 			}),
 			getHomeCourseDate:build.query({
-				query: () => ({
-					url:`/api/mountainInfo?mountain=설악산`,
+				query: ({mount}) => ({
+					url:`/api/mountainInfo?mountain=${mount}`,
 					method:"get",
+					data:mount
 				}),
 				providesTags: ["HOMEDATACOURSE"],
 			})
