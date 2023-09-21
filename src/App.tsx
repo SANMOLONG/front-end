@@ -26,7 +26,7 @@ function App() {
 				<Route path='/joinboard' element={<Pages.JoinBoard />} />
 				<Route path='/joinwrite' element={<Pages.JoinWrite />} />
 				<Route path='/joindetail' element={<Pages.JoinDetail />} />
-				<Route path='/coursedetail' element={<Pages.CourseDetail />} />
+				<Route path='/coursedetail/:id' element={<Pages.CourseDetail />} />
 			</Routes>
 		</Layout>
 	);

@@ -6,9 +6,20 @@ import mountain from "../asset/mountain.png";
 import ryongso from "../asset/ryongso.png";
 import route from "../asset/route.png";
 import { seorak } from "../asset";
+import { useNavigate } from "react-router-dom";
 
 export const CourseDetail = () => {
-	const searchNaverMap = () => {
+	const navigate = useNavigate();
+
+	const onMoveHomeHandler = () => {
+		navigate("/home");
+	};
+
+	const onMoveChatHandler = () => {
+		navigate("/home/1");
+	};
+
+	const searchKakaoMap = () => {
 		const routeName = encodeURIComponent("용소폭포코스"); // 검색어
 		const url = `https://map.kakao.com/?q=${routeName}`;
 		window.open(url, "_blank"); // 새 탭에서 열기
@@ -49,15 +60,15 @@ export const CourseDetail = () => {
 						</div>
 					</FlexBox>
 					<FlexBox $jc='space-between'>
-						<BackButton>뒤로가기</BackButton>
+						<BackButton onClick={onMoveHomeHandler}>뒤로가기</BackButton>
 						<FlexBox $jc='flex-end' $gap={20}>
-							<ChatButton>실시간 채팅</ChatButton>
+							<ChatButton onClick={onMoveChatHandler}>실시간 채팅</ChatButton>
 							<CourseButton>코스선택</CourseButton>
 						</FlexBox>
 					</FlexBox>
 				</FlexBox>
 
-				<div onClick={searchNaverMap}>
+				<div onClick={searchKakaoMap}>
 					<img style={{ width: "350px", height: "180px", borderRadius: "10px" }} src={route} alt='' />
 				</div>
 				<div style={{ padding: "0 20px" }}>
