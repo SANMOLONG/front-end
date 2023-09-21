@@ -39,7 +39,7 @@ return (
         <div>
           <SC.FlexBox $jc='flex-start' $ai='end' $gap={5}>
             <SC.CustomH1 children="산모롱이" />
-            <SC.MainBtn onClick={onNavigete('/home')} children="등산하러 가기" />
+            <SC.MainBtn onClick={onNavigate('/home')} children="등산하러 가기" />
           </SC.FlexBox>
           <SC.CustomH2 children="강원특별자치도의 아름다운 골짜기 기행" />
         </div>
@@ -59,7 +59,7 @@ return (
         <SC.ScrollDiv $state={lastIntro} children={<p>내용 더보기</p>}/>
         <SC.NavBottom $jc='space-around'>
           {[[homeSvg, "/home"], [togeterSvg, "/joinboard"], [userSvg, "/mypage"]].map(list => 
-            <SC.NavIcon key={list[1]} onClick={onNavigete(list[1])} children={<img src={list[0]} alt='NavbottomImg'/>} />)}
+            <SC.NavIcon key={list[1]} onClick={onNavigate(list[1])} children={<img src={list[0]} alt='NavbottomImg'/>} />)}
         </SC.NavBottom>
       </div>
     </SC.PagesLayout>

@@ -14,7 +14,7 @@ export const useChatting = ():any => {
       chat-useState - input 메시지가 입력된 state
       receiveMsg-useState - 받은 메시지를 담을 state*/
 
-      const { onNavigete, id } = useRoute()
+      const { onNavigate, id } = useRoute()
       const clientRef = useRef<any>(null)
       const chattingAreaRef = useRef<HTMLDivElement | null>(null)
       const [mountSelect, setMountSelect] = useState(false);
@@ -138,5 +138,5 @@ export const useChatting = ():any => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
       }, [])
 
-      return {mount, mountSelect, chat, chattingAreaRef, chatMsg, sendChat, urgentChat, setChat, onNavigete, onMountSelect, onRoomChange}
+      return {mount, mountSelect, chat, chattingAreaRef, chatMsg, sendChat, urgentChat, setChat, onNavigate, onMountSelect, onRoomChange}
 }

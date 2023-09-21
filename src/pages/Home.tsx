@@ -12,7 +12,7 @@ import { useRoute } from '../hooks'
 
 
 export const Home: FC = () => {
-  const {onNavigete} = useRoute()
+  const {onNavigate} = useRoute()
   const [mount, setMount] = useState<any>(["설악산", 1])
   const onChangeMount = (targer: any) => () => {
     setMount(targer)
@@ -289,8 +289,8 @@ export const Home: FC = () => {
 
 
         <SC.FlexBox $jc='space-between' style={{ padding: "0 30px" }}>
-        <SettingsBTN onClick={onNavigete("1")}>실시간채팅</SettingsBTN>
-          <SettingsBTN onClick={onNavigete('/joinboard')}>함께하기</SettingsBTN>
+        <SettingsBTN onClick={onNavigate("1")}>실시간채팅</SettingsBTN>
+          <SettingsBTN onClick={onNavigate('/joinboard')}>함께하기</SettingsBTN>
         </SC.FlexBox>
       </MountCourse>
       <SC.FooterNav />
