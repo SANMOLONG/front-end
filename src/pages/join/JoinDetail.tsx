@@ -1,282 +1,112 @@
 import React from "react";
-import { Flex, FlexBox, Footer } from "../../components";
+import { Flex, FlexBox, Footer, FooterNav } from "../../components";
 import styled from "styled-components";
 import { Styled } from "../../types/styled";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import * as AS from "../../asset";
+import { useGetJoinDetailQuery } from "../../redux/api/RTKquery";
 
 export const JoinDetail = () => {
 	const navigate = useNavigate();
-
+	const { id } = useParams();
 	const onBackButtonHandler = () => {
 		navigate("/joinboard");
 	};
-	return (
-		<JoinDetailOutline>
-			<div style={{ display: "flex", justifyContent: "space-between", width: "100%" }}>
-				<BackButton onClick={onBackButtonHandler}>돌아가기</BackButton>
-				<div style={{ fontSize: "40px", fontFamily: "HakgyoansimGaeulsopungB" }}>산모롱이</div>
-			</div>
-			<TitleContainer>
-				<TitleText>제목</TitleText>
-				<Title children='함께 등산가실 분 구합니다!!!' />
-			</TitleContainer>
-			<CourseInfo>
-				<FlexBox $fd='row' $ai='center' $jc='space-between' style={{ width: "100%" }}>
-					<div style={{ fontSize: "18px", fontWeight: "bold", flex: 0.6 }}>용대폭포코스</div>
-					<FlexBox $jc='flex-start' $fd='column' $ai='flex-start' style={{ flex: 1 }}>
-						<FlexBox $jc='normal'>
-							<div>난이도 : 지옥</div>
-							<div>시간 : 4시간30분</div>
-						</FlexBox>
-						<div style={{ fontSize: "10px" }}>출발지 : 주전골 입구(강원도 영양군 서면 약수길 45)</div>
-					</FlexBox>
-				</FlexBox>
 
-				<div style={{ fontWeight: "bold" }}>
-					수정처럼 맑은 계곡과 기이한 암석이 어우러져 우리나라 최고의 단풍을 즐길 수 있는 대표 코스
-				</div>
-			</CourseInfo>
-			<div style={{ height: "150px", overflowY: "scroll", borderRadius: "10px" }}>
-				<Content>
-					{`슝~갓다 슝~갔다 픡 꼬꾸라지면 you die
+	const { isLoading, isError, data } = useGetJoinDetailQuery({ id });
+	console.log(data);
 
-					◈ 모집요강 지리산 등산학교 제21기 동계반 모집요강
+	if (isLoading || isError) return <div>로딩 중...</div>;
+	else {
+		const {
+			title,
+			content,
+			course,
+			courseDetail,
+			departAD,
+			departNM,
+			level,
+			mountDate,
+			completed,
+			author,
+			comments,
+			spendTime,
+		} = data;
+		return (
+			<>
+				<JoinDetailOutline>
+					<div style={{ display: "flex", justifyContent: "space-between", width: "100%" }}>
+						<BackButton onClick={onBackButtonHandler}>돌아가기</BackButton>
+						<div style={{ fontSize: "40px", fontFamily: "HakgyoansimGaeulsopungB" }}>산모롱이</div>
+					</div>
+					<TitleContainer>
+						<TitleText>제목</TitleText>
+						<Title children={title} />
+					</TitleContainer>
+					<CourseInfo>
+						<FlexBox $fd='row' $ai='center' $jc='space-between' style={{ width: "100%" }}>
+							<div style={{ fontSize: "18px", fontWeight: "bold", flex: 0.6 }}>{course}</div>
+							<FlexBox $jc='flex-start' $fd='column' $ai='flex-start' style={{ flex: 1 }}>
+								<FlexBox $jc='normal'>
+									<div>난이도 : {level}</div>
+									<div>시간 : {spendTime}</div>
+								</FlexBox>
+								<div style={{ fontSize: "10px" }}>
+									출발지 : {departNM}
+									{departAD}
+								</div>
+							</FlexBox>
+						</FlexBox>
 
-					◎ 일정 : 2006년	12월 9일 ~ 10일 (지리산 중산리 : 오후1시 )
-					1 2월 16일 ~ 17일 (오후1시) 2007년 1월 6일 ~ 7일 (오후1시)
-				1월 13일 ~ 14일 (오후1시) 1월 20일 ~ 21일（오후1시) (시간변동은 여건에 따라 있을 수 있습니다.)
+						<div style={{ fontWeight: "bold" }}>{courseDetail}</div>
+					</CourseInfo>
+					<div style={{ height: "150px", overflowY: "scroll", borderRadius: "10px" }}>
+						<Content>{content}</Content>
+					</div>
+					<div style={{ height: "320px", overflowY: "scroll" }}>
+						<CommentContainer>
+							{comments.map((item: any, idx: number) => (
+								<FlexBox $fd='column' $ai='flex-start' key={idx}>
+									<FlexBox $jc='space-between'>
+										<FlexBox $jc='flex-start' $gap={10}>
+											<div style={{ fontWeight: "bold" }}>{item.nickname}</div>
+											<div style={{ fontSize: "10px" }}>Date. {item.createdAt}</div>
+										</FlexBox>
+										<FlexBox $jc='flex-end' $gap={5}>
+											<div
+												style={{
+													backgroundColor: "#ff9859",
+													padding: "2px 5px",
+													borderRadius: "4px",
+												}}>
+												<img src={AS.trash} alt='' />
+											</div>
+											<div
+												style={{
+													backgroundColor: "#FFECDB",
+													padding: "2px 5px",
+													borderRadius: "4px",
+												}}>
+												<img src={AS.rewrite} alt='' />
+											</div>
+										</FlexBox>
+									</FlexBox>
+									<div>{item.content}</div>
+								</FlexBox>
+							))}
+						</CommentContainer>
+					</div>
 
-				◎ 입교비
-				: 일반 12만원, 학생 8만원 경남은행 567-22-0094763 예금주 : 경남산악연맹
-
-				◎ 수업시간 : 토요일 오후 1시 ~
-				일요일 오후 4시까지 ◎ 접수마감 : 2006년 11월 30일 ◎ 제출서류 : 입학원서, 사진2매`}
-				</Content>
-			</div>
-			<div style={{ height: "320px", overflowY: "scroll" }}>
-				<CommentContainer>
-					<FlexBox $jc='space-between'>
-						<FlexBox $jc='flex-start' $gap={10}>
-							<div style={{ fontWeight: "bold" }}>모롱이 닉네임</div>
-							<div style={{ fontSize: "10px" }}>Date. 2023.09.23</div>
-						</FlexBox>
-						<FlexBox $jc='flex-end' $gap={5}>
-							<div style={{ backgroundColor: "#ff9859", padding: "2px 5px", borderRadius: "4px" }}>
-								<img src={AS.trash} alt='' />
-							</div>
-							<div style={{ backgroundColor: "#FFECDB", padding: "2px 5px", borderRadius: "4px" }}>
-								<img src={AS.rewrite} alt='' />
-							</div>
-						</FlexBox>
-					</FlexBox>
-					<div>요렛는데? 요로? 요로요로요로롱~ 으잉?</div>
-					<FlexBox $jc='space-between'>
-						<FlexBox $jc='flex-start' $gap={10}>
-							<div style={{ fontWeight: "bold" }}>모롱이 닉네임</div>
-							<div style={{ fontSize: "10px" }}>Date. 2023.09.23</div>
-						</FlexBox>
-						<FlexBox $jc='flex-end' $gap={5}>
-							<div style={{ backgroundColor: "#ff9859", padding: "2px 5px", borderRadius: "4px" }}>
-								<img src={AS.trash} alt='' />
-							</div>
-							<div style={{ backgroundColor: "#FFECDB", padding: "2px 5px", borderRadius: "4px" }}>
-								<img src={AS.rewrite} alt='' />
-							</div>
-						</FlexBox>
-					</FlexBox>
-					<div>요렛는데? 요로? 요로요로요로롱~ 으잉?</div>
-					<FlexBox $jc='space-between'>
-						<FlexBox $jc='flex-start' $gap={10}>
-							<div style={{ fontWeight: "bold" }}>모롱이 닉네임</div>
-							<div style={{ fontSize: "10px" }}>Date. 2023.09.23</div>
-						</FlexBox>
-						<FlexBox $jc='flex-end' $gap={5}>
-							<div style={{ backgroundColor: "#ff9859", padding: "2px 5px", borderRadius: "4px" }}>
-								<img src={AS.trash} alt='' />
-							</div>
-							<div style={{ backgroundColor: "#FFECDB", padding: "2px 5px", borderRadius: "4px" }}>
-								<img src={AS.rewrite} alt='' />
-							</div>
-						</FlexBox>
-					</FlexBox>
-					<div>요렛는데? 요로? 요로요로요로롱~ 으잉?</div>{" "}
-					<FlexBox $jc='space-between'>
-						<FlexBox $jc='flex-start' $gap={10}>
-							<div style={{ fontWeight: "bold" }}>모롱이 닉네임</div>
-							<div style={{ fontSize: "10px" }}>Date. 2023.09.23</div>
-						</FlexBox>
-						<FlexBox $jc='flex-end' $gap={5}>
-							<div style={{ backgroundColor: "#ff9859", padding: "2px 5px", borderRadius: "4px" }}>
-								<img src={AS.trash} alt='' />
-							</div>
-							<div style={{ backgroundColor: "#FFECDB", padding: "2px 5px", borderRadius: "4px" }}>
-								<img src={AS.rewrite} alt='' />
-							</div>
-						</FlexBox>
-					</FlexBox>
-					<div>요렛는데? 요로? 요로요로요로롱~ 으잉?</div>{" "}
-					<FlexBox $jc='space-between'>
-						<FlexBox $jc='flex-start' $gap={10}>
-							<div style={{ fontWeight: "bold" }}>모롱이 닉네임</div>
-							<div style={{ fontSize: "10px" }}>Date. 2023.09.23</div>
-						</FlexBox>
-						<FlexBox $jc='flex-end' $gap={5}>
-							<div style={{ backgroundColor: "#ff9859", padding: "2px 5px", borderRadius: "4px" }}>
-								<img src={AS.trash} alt='' />
-							</div>
-							<div style={{ backgroundColor: "#FFECDB", padding: "2px 5px", borderRadius: "4px" }}>
-								<img src={AS.rewrite} alt='' />
-							</div>
-						</FlexBox>
-					</FlexBox>
-					<div>요렛는데? 요로? 요로요로요로롱~ 으잉?</div>{" "}
-					<FlexBox $jc='space-between'>
-						<FlexBox $jc='flex-start' $gap={10}>
-							<div style={{ fontWeight: "bold" }}>모롱이 닉네임</div>
-							<div style={{ fontSize: "10px" }}>Date. 2023.09.23</div>
-						</FlexBox>
-						<FlexBox $jc='flex-end' $gap={5}>
-							<div style={{ backgroundColor: "#ff9859", padding: "2px 5px", borderRadius: "4px" }}>
-								<img src={AS.trash} alt='' />
-							</div>
-							<div style={{ backgroundColor: "#FFECDB", padding: "2px 5px", borderRadius: "4px" }}>
-								<img src={AS.rewrite} alt='' />
-							</div>
-						</FlexBox>
-					</FlexBox>
-					<div>요렛는데? 요로? 요로요로요로롱~ 으잉?</div>{" "}
-					<FlexBox $jc='space-between'>
-						<FlexBox $jc='flex-start' $gap={10}>
-							<div style={{ fontWeight: "bold" }}>모롱이 닉네임</div>
-							<div style={{ fontSize: "10px" }}>Date. 2023.09.23</div>
-						</FlexBox>
-						<FlexBox $jc='flex-end' $gap={5}>
-							<div style={{ backgroundColor: "#ff9859", padding: "2px 5px", borderRadius: "4px" }}>
-								<img src={AS.trash} alt='' />
-							</div>
-							<div style={{ backgroundColor: "#FFECDB", padding: "2px 5px", borderRadius: "4px" }}>
-								<img src={AS.rewrite} alt='' />
-							</div>
-						</FlexBox>
-					</FlexBox>
-					<div>요렛는데? 요로? 요로요로요로롱~ 으잉?</div>
-					<FlexBox $jc='space-between'>
-						<FlexBox $jc='flex-start' $gap={10}>
-							<div style={{ fontWeight: "bold" }}>모롱이 닉네임</div>
-							<div style={{ fontSize: "10px" }}>Date. 2023.09.23</div>
-						</FlexBox>
-						<FlexBox $jc='flex-end' $gap={5}>
-							<div style={{ backgroundColor: "#ff9859", padding: "2px 5px", borderRadius: "4px" }}>
-								<img src={AS.trash} alt='' />
-							</div>
-							<div style={{ backgroundColor: "#FFECDB", padding: "2px 5px", borderRadius: "4px" }}>
-								<img src={AS.rewrite} alt='' />
-							</div>
-						</FlexBox>
-					</FlexBox>
-					<div>요렛는데? 요로? 요로요로요로롱~ 으잉?</div>
-					<FlexBox $jc='space-between'>
-						<FlexBox $jc='flex-start' $gap={10}>
-							<div style={{ fontWeight: "bold" }}>모롱이 닉네임</div>
-							<div style={{ fontSize: "10px" }}>Date. 2023.09.23</div>
-						</FlexBox>
-						<FlexBox $jc='flex-end' $gap={5}>
-							<div style={{ backgroundColor: "#ff9859", padding: "2px 5px", borderRadius: "4px" }}>
-								<img src={AS.trash} alt='' />
-							</div>
-							<div style={{ backgroundColor: "#FFECDB", padding: "2px 5px", borderRadius: "4px" }}>
-								<img src={AS.rewrite} alt='' />
-							</div>
-						</FlexBox>
-					</FlexBox>
-					<div>요렛는데? 요로? 요로요로요로롱~ 으잉?</div>
-					<FlexBox $jc='space-between'>
-						<FlexBox $jc='flex-start' $gap={10}>
-							<div style={{ fontWeight: "bold" }}>모롱이 닉네임</div>
-							<div style={{ fontSize: "10px" }}>Date. 2023.09.23</div>
-						</FlexBox>
-						<FlexBox $jc='flex-end' $gap={5}>
-							<div style={{ backgroundColor: "#ff9859", padding: "2px 5px", borderRadius: "4px" }}>
-								<img src={AS.trash} alt='' />
-							</div>
-							<div style={{ backgroundColor: "#FFECDB", padding: "2px 5px", borderRadius: "4px" }}>
-								<img src={AS.rewrite} alt='' />
-							</div>
-						</FlexBox>
-					</FlexBox>
-					<div>요렛는데? 요로? 요로요로요로롱~ 으잉?</div>
-					<FlexBox $jc='space-between'>
-						<FlexBox $jc='flex-start' $gap={10}>
-							<div style={{ fontWeight: "bold" }}>모롱이 닉네임</div>
-							<div style={{ fontSize: "10px" }}>Date. 2023.09.23</div>
-						</FlexBox>
-						<FlexBox $jc='flex-end' $gap={5}>
-							<div style={{ backgroundColor: "#ff9859", padding: "2px 5px", borderRadius: "4px" }}>
-								<img src={AS.trash} alt='' />
-							</div>
-							<div style={{ backgroundColor: "#FFECDB", padding: "2px 5px", borderRadius: "4px" }}>
-								<img src={AS.rewrite} alt='' />
-							</div>
-						</FlexBox>
-					</FlexBox>
-					<div>요렛는데? 요로? 요로요로요로롱~ 으잉?</div>
-					<FlexBox $jc='space-between'>
-						<FlexBox $jc='flex-start' $gap={10}>
-							<div style={{ fontWeight: "bold" }}>모롱이 닉네임</div>
-							<div style={{ fontSize: "10px" }}>Date. 2023.09.23</div>
-						</FlexBox>
-						<FlexBox $jc='flex-end' $gap={5}>
-							<div style={{ backgroundColor: "#ff9859", padding: "2px 5px", borderRadius: "4px" }}>
-								<img src={AS.trash} alt='' />
-							</div>
-							<div style={{ backgroundColor: "#FFECDB", padding: "2px 5px", borderRadius: "4px" }}>
-								<img src={AS.rewrite} alt='' />
-							</div>
-						</FlexBox>
-					</FlexBox>
-					<div>요렛는데? 요로? 요로요로요로롱~ 으잉?</div>
-					<FlexBox $jc='space-between'>
-						<FlexBox $jc='flex-start' $gap={10}>
-							<div style={{ fontWeight: "bold" }}>모롱이 닉네임</div>
-							<div style={{ fontSize: "10px" }}>Date. 2023.09.23</div>
-						</FlexBox>
-						<FlexBox $jc='flex-end' $gap={5}>
-							<div style={{ backgroundColor: "#ff9859", padding: "2px 5px", borderRadius: "4px" }}>
-								<img src={AS.trash} alt='' />
-							</div>
-							<div style={{ backgroundColor: "#FFECDB", padding: "2px 5px", borderRadius: "4px" }}>
-								<img src={AS.rewrite} alt='' />
-							</div>
-						</FlexBox>
-					</FlexBox>
-					<div>요렛는데? 요로? 요로요로요로롱~ 으잉?</div>
-					<FlexBox $jc='space-between'>
-						<FlexBox $jc='flex-start' $gap={10}>
-							<div style={{ fontWeight: "bold" }}>모롱이 닉네임</div>
-							<div style={{ fontSize: "10px" }}>Date. 2023.09.23</div>
-						</FlexBox>
-						<FlexBox $jc='flex-end' $gap={5}>
-							<div style={{ backgroundColor: "#ff9859", padding: "2px 5px", borderRadius: "4px" }}>
-								<img src={AS.trash} alt='' />
-							</div>
-							<div style={{ backgroundColor: "#FFECDB", padding: "2px 5px", borderRadius: "4px" }}>
-								<img src={AS.rewrite} alt='' />
-							</div>
-						</FlexBox>
-					</FlexBox>
-					<div>요렛는데? 요로? 요로요로요로롱~ 으잉?</div>
-				</CommentContainer>
-			</div>
-
-			<SectorGradation></SectorGradation>
-			<CommentSubmitContainer>
-				<CommentInput />
-				<CommentButton>보내기</CommentButton>
-			</CommentSubmitContainer>
-			<Footer />
-		</JoinDetailOutline>
-	);
+					<SectorGradation></SectorGradation>
+					<CommentSubmitContainer>
+						<CommentInput />
+						<CommentButton>보내기</CommentButton>
+					</CommentSubmitContainer>
+				</JoinDetailOutline>
+				<FooterNav />
+			</>
+		);
+	}
 };
 
 const JoinDetailOutline = styled.div<Partial<Styled>>`

@@ -4,12 +4,12 @@ import styled from "styled-components";
 interface DropdownMenuProps {
 	type: "mountain" | "course";
 	items: string[];
+	selected: string;
+	setSelected: React.Dispatch<React.SetStateAction<string>>;
 }
 
-export const JoinBoardDrop: React.FC<DropdownMenuProps> = ({ type, items }) => {
+export const JoinBoardDrop: React.FC<DropdownMenuProps> = ({ type, items, selected, setSelected }) => {
 	const [dropActivate, setDropActivate] = useState<{ [key: string]: boolean }>({});
-	const [selectedMountain, setSelectedMountain] = useState("산 선택");
-	const [selectedCourse, setSelectedCourse] = useState("코스 선택");
 
 	const dropMenuButtonHandler = (type: string) => () => {
 		setDropActivate((prevState) => ({ ...prevState, [type]: !prevState[type] }));
@@ -21,15 +21,9 @@ export const JoinBoardDrop: React.FC<DropdownMenuProps> = ({ type, items }) => {
 	};
 
 	const selectItem = (item: string) => {
-		if (type === "mountain") {
-			setSelectedMountain(item);
-		} else if (type === "course") {
-			setSelectedCourse(item);
-		}
+		setSelected(item);
 		setDropActivate((prevState) => ({ ...prevState, [type]: false }));
 	};
-
-	const selected = type === "mountain" ? selectedMountain : selectedCourse;
 
 	return (
 		<div

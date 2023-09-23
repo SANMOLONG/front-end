@@ -5,7 +5,7 @@ import { AxiosRequestConfig } from "axios";
 import { CustomAxiosError, ErrorType } from "./api";
 
 const instance: axiosType.AxiosInstance = axios.create({
-  baseURL: "http://ec2-13-125-219-90.ap-northeast-2.compute.amazonaws.com",
+	baseURL: "http://ec2-13-125-219-90.ap-northeast-2.compute.amazonaws.com",
 });
 
 const axiosBaseQuery =
@@ -34,19 +34,15 @@ const axiosBaseQuery =
 		}
 	};
 
-
 export const rtkQuery = createApi({
 	baseQuery: axiosBaseQuery(),
-	tagTypes: [
-		"HOMEDATA",
-		"HOMEDATACOURSE"
-	],
-  endpoints(build) {
+	tagTypes: ["HOMEDATA", "HOMEDATACOURSE", "COURSE", "JOINLIST", "JOINDETAIL"],
+	endpoints(build) {
 		return {
-			getHomedate:build.query({
+			getHomedate: build.query({
 				query: () => ({
-					url:`/api/sliderInfo?nickname=모롱이`,
-					method:"get",
+					url: `/api/sliderInfo?nickname=모롱이`,
+					method: "get",
 				}),
 				providesTags: ["HOMEDATA"],
 			}),
@@ -57,15 +53,38 @@ export const rtkQuery = createApi({
 					data:mount
 				}),
 				providesTags: ["HOMEDATACOURSE"],
-			})
-		}
-  }
-})
+			}),
+			getCourse: build.query({
+				query: () => ({
+					url: `/api/courseInfo?course=용소폭포코스`,
+					method: "get",
+				}),
+				providesTags: ["COURSE"],
+			}),
+			getJoinBoard: build.query({
+				query: ({ selectedMountain, selectedCourse }) => ({
+					url: `/api/posts?mount=${selectedMountain}&course=${selectedCourse}`,
+					method: "get",
+				}),
+				providesTags: ["JOINLIST"],
+			}),
+			getJoinDetail: build.query({
+				query: ({ id }) => ({
+					url: `/api/posts/${id}`,
+					method: "get",
+				}),
+				providesTags: ["JOINDETAIL"],
+			}),
+		};
+	},
+});
 
 // /api/mountainInfo?mount=설악산
 
-
 export const {
 	useGetHomedateQuery,
-	useGetHomeCourseDateQuery
-} = rtkQuery
+	useGetHomeCourseDateQuery,
+	useGetCourseQuery,
+	useGetJoinBoardQuery,
+	useGetJoinDetailQuery,
+} = rtkQuery;
